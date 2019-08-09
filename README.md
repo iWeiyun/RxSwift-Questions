@@ -33,13 +33,13 @@
 ```swift
 var error = true
 _ = Observable.of(1, 2, 3, 4).flatMap { v -> Observable<Int> in
-  if v == 2, error {
-    error = false
-    return Observable.error(TestError.test)
-  }
-  return Observable.of(v)
+    if v == 2, error {
+        error = false
+        return Observable.error(TestError.test)
+    }
+    return Observable.of(v)
 }.retry().subscribe(onNext: { r in
-  print(r)
+    print(r)
 })
 ```
 
