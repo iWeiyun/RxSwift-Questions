@@ -4,10 +4,10 @@
 
 #### 1. 用哪个操作符可以模拟promise的then
 
-- A: compactMap
-- B: publish
-- C: flatMap
-- D: withLatestFrom
+- A: `compactMap`
+- B: `publish`
+- C: `flatMap`
+- D: `withLatestFrom`
 
 ----
 
@@ -33,7 +33,7 @@ _ = Observable.of(1, 2, 3, 4).flatMap { v -> Observable<Int> in
 })
 ```
 
-- A: 1 2 3 4
-- B: 1 2 1 2 3 4
-- C: 1 1 2 3 4
-- D: 1 2 3 4 1 2 3 4
+- A: `1 2 3 4`
+- B: `1 2 1 2 3 4`
+- C: `1 1 2 3 4`
+- D: `1 2 3 4 1 2 3 4`
