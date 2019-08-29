@@ -1,7 +1,6 @@
 # List Of RxSwift Questions
 
 
-### 操作符
 
 #### 1. 用哪个操作符可以模拟promise的then
 
