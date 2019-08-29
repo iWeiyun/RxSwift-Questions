@@ -101,8 +101,62 @@
 
 ----
 
+#### 12. 如果想让订阅代码在指定线程执行，需要用哪个操作符
 
-#### 12. 如下代码执行结果是？
+- A: `subscribeOn`
+- B: `obseverOn`
+- C: `materialize`
+- D: `using`
+
+----
+
+#### 13. 如果Observable被多次订阅，但只希望执行一次创建代码，下面哪种方式是可以的
+
+- A: `Single对象`
+- B: `publish操作符`
+- C: `refCount操作符`
+- D: `buffer操作符`
+
+----
+
+#### 14. 下面哪个对象跟其它三个差别较大
+
+- A: `Single`
+- B: `Signal`
+- C: `Driver`
+- D: `ControlEvent`
+
+-----
+
+#### 15. 下面哪个对象不属于 Observable & Observer
+
+- A: `PublishRelay`
+- B: `ControlEvent`
+- C: `ControlProperty`
+- D: `BehaviorSubject`
+
+----
+
+#### 16. 下面哪个操作符也可以不需要手动调用complete/error也可以清理Rx的资源
+
+- A: `skipWhile`
+- B: `takeUntil`
+- C: `sample`
+- D: `refCount`
+
+----
+
+#### 17. 哪个操作符可将connectable的对象转为普通observable对象
+
+- A: `refCount`
+- B: `publish`
+- C: `sample`
+- D: `replay`
+
+----
+
+
+#### 18. 如下代码执行结果是？
 ```swift
 let o = Observable.from([1,2,3]).publish()
 _ = o.subscribe(onNext: { print($0) })
@@ -118,7 +172,7 @@ _ = o.subscribe(onNext: { print($0) })
 
 ----
 
-#### 13. 如下代码执行结果是？
+#### 19. 如下代码执行结果是？
 ```swift
 let o = Observable.from([1,2,3]).replay(2)
 _ = o.subscribe(onNext: { print($0) })
@@ -135,7 +189,7 @@ _ = o.connect()
 
 ----
 
-#### 14. 如下代码执行结果是？
+#### 20. 如下代码执行结果是？
 ```swift
 let o = Observable.from([1,2,3]).share(replay: 2)
 _ = o.subscribe(onNext: { print($0) })
@@ -150,7 +204,7 @@ _ = o.subscribe(onNext: { print($0) })
 
 ----
 
-#### 15. 如下代码执行结果是什么样的？
+#### 21. 如下代码执行结果是什么样的？
 ```swift
 let o = Observable.from([1,2,3]).share(replay: 1, scope: .forever)
 _ = o.subscribe(onNext: { print($0) })
@@ -165,7 +219,7 @@ _ = o.subscribe(onNext: { print($0) })
 
 ----
 
-#### 16. 如下代码执行结果是？
+#### 22. 如下代码执行结果是？
 ```swift
 let o = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
   .take(3)
@@ -181,7 +235,7 @@ _ = o.subscribe(onNext: { print($0) })
 
 ----
 
-#### 17. 如下代码执行结果是？
+#### 23. 如下代码执行结果是？
 ```swift
 let o = Observable.from([1,2]).share(replay: 1, scope: .forever)
 let d1 = o.subscribe(onNext: { print($0) })
@@ -202,7 +256,7 @@ _ = o.subscribe(onNext: { print($0) })
 
 ----
 
-#### 18. 如下代码执行结果是？
+#### 24. 如下代码执行结果是？
 ```swift
 let s = PublishSubject<Int>()
 let t = s.throttle(.seconds(2), scheduler: MainScheduler.instance)
@@ -222,7 +276,7 @@ _ = Observable<Never>.empty().delay(.seconds(1), scheduler: MainScheduler.instan
 
 ----
 
-#### 19. 如下代码执行结果是？
+#### 25. 如下代码执行结果是？
 ```swift
 let o = Observable.from(1...10).groupBy { $0 % 3 }.flatMap { $0.toArray() }
 _ = o.subscribe(onNext: { print($0) })
@@ -235,7 +289,7 @@ _ = o.subscribe(onNext: { print($0) })
 
 ----
 
-#### 20. 如下代码执行结果是？
+#### 26. 如下代码执行结果是？
 ```swift
 let o = Observable.from(1...10).groupBy { $0 % 3 }.concatMap { $0 }
 _ = o.subscribe(onNext: { print($0) })
@@ -248,7 +302,7 @@ _ = o.subscribe(onNext: { print($0) })
 
 ----
 
-#### 21. 如下代码执行结果是？
+#### 27. 如下代码执行结果是？
 ```swift
 let o = Observable.from(1...10).groupBy { $0 % 3 }.flatMap { $0 }
 _ = o.subscribe(onNext: { print($0) })
@@ -261,7 +315,7 @@ _ = o.subscribe(onNext: { print($0) })
 
 ----
 
-#### 22. 如下代码执行结果是？
+#### 28. 如下代码执行结果是？
 ```swift
 let o1 = Observable.interval(.seconds(1), scheduler: MainScheduler.instance).map{ String(UnicodeScalar(UInt8($0 + 97))) }.take(3)
 let o2 = Observable<Int>.interval(.milliseconds(700), scheduler: MainScheduler.instance).take(4)
@@ -275,7 +329,7 @@ _ = Observable.combineLatest(o1, o2) { $0 + String($1) }.subscribe(onNext: { pri
 
 ----
 
-#### 23. 如下代码执行结果是？
+#### 29. 如下代码执行结果是？
 ```swift
 var error = true
 _ = Observable.of(1, 2, 3, 4).flatMap { v -> Observable<Int> in
@@ -300,7 +354,7 @@ _ = Observable.of(1, 2, 3, 4).flatMap { v -> Observable<Int> in
 
 ----
 
-#### 24. 如下代码执行结果是？
+#### 30. 如下代码执行结果是？
 ```swift
 let one = PublishSubject<String>()
 let two = PublishSubject<String>()
@@ -330,7 +384,7 @@ one.onNext("3")
 
 ----
 
-#### 25. 如下代码执行结果是什么样的？
+#### 31. 如下代码执行结果是什么样的？
 ```swift
 let ob = Observable<Int>.from([1, 2]).publish()
 ob.subscribe(onNext: { int in
@@ -355,7 +409,7 @@ print("Z")
 
 ----
 
-#### 26. 如下代码执行结果是什么样的？
+#### 32. 如下代码执行结果是什么样的？
 ```swift
 let pbSubject = PublishSubject<Int>()
 pbSubject.debounce(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
@@ -380,7 +434,7 @@ pbSubject.onNext(3)
 
 ----
 
-#### 27. 如下代码执行结果是什么样的？
+#### 33. 如下代码执行结果是什么样的？
 ```swift
 let subject = ReplaySubject<String>.create(bufferSize: 2)
 subject.onNext("0")
@@ -403,7 +457,7 @@ subject.subscribe { print("Z", $0.element ?? $0.error) }
 
 ----
 
-#### 28. 如下代码执行结果是什么样的？
+#### 34. 如下代码执行结果是什么样的？
 ```swift
 let button = PublishSubject<Void>()
 let textField = PublishSubject<String>()
@@ -425,7 +479,7 @@ button.onNext({}())
 
 ----
 
-#### 29. 如下代码执行结果是？
+#### 35. 如下代码执行结果是？
 ```swift
 var error = true
 _ = Observable.of(1, 2, 3, 4).flatMap { v -> Observable<Int> in
