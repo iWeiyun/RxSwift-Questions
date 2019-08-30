@@ -427,7 +427,7 @@ pbSubject.onNext(3)
 
 ----
 
-#### 34. 如下代码执行结果是什么样的？
+#### 33. 如下代码执行结果是什么样的？
 ```swift
 let button = PublishSubject<Void>()
 let textField = PublishSubject<String>()
@@ -449,7 +449,7 @@ button.onNext(())
 
 ----
 
-#### 35. 如下代码执行结果是？
+#### 34. 如下代码执行结果是？
 ```swift
 var error = true
 _ = Observable.of(1, 2, 3, 4).flatMap { v -> Observable<Int> in
