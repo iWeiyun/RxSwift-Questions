@@ -561,4 +561,80 @@ second.onNext(6)
 - C: `next(1) next(3) next(5) next(0) next(6)`
 - D: `next(1) next(3) next(5) next(0) completed`
 
+----
+
+#### 38. 如下代码执行结果是？
+```swift
+let first = Observable<Int>.interval(.milliseconds(200), scheduler: MainScheduler.instance)
+let second = Observable<Int>.interval(.milliseconds(200), scheduler: MainScheduler.instance)
+
+_ = first
+    .throttle(.milliseconds(100), scheduler: MainScheduler.instance)
+    .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+    .subscribe(onNext: { print("A\($0)") })
+_ = second
+    .debounce(.milliseconds(100), scheduler: MainScheduler.instance)
+    .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
+    .subscribe(onNext: { print("B\($0)") })
+```
+
+- A: `A0 B0 A2 B2 A5 B5 A7 B7...`
+- B: `B0 B2 B5 B7 B10...`
+- C: `A0 A2 A5 A7 A10...`
+- D: `(NOTHING OUTPUT)`
+
+----
+
+#### 39. 如下代码执行结果是？
+```swift
+let first = BehaviorSubject(value: 1)
+let second = BehaviorSubject(value: 1)
+
+_ = first
+    .asObserver().debug("A")
+    .delay(.milliseconds(200), scheduler: MainScheduler.instance)
+    .delaySubscription(.milliseconds(100), scheduler: MainScheduler.instance)
+    .subscribe(onNext: { print("A\($0)") })
+
+_ = second
+    .asObserver().debug("B")
+    .delaySubscription(.milliseconds(200), scheduler: MainScheduler.instance)
+    .delay(.milliseconds(100), scheduler: MainScheduler.instance)
+    .subscribe(onNext: { print("B\($0)") })
+
+first.onNext(2)
+second.onNext(2)
+```
+
+- A: `A1 A2 B1 B2`
+- B: `A1 A2 B2`
+- C: `B2 A2`
+- D: `A2 B2`
+
+----
+
+#### 40. 如下代码执行结果是？
+```swift
+let first = PublishSubject<Int>()
+let second = PublishSubject<Int>()
+let third = PublishSubject<Int>()
+
+_ = Observable<Int>
+    .amb([first.asObservable(), second.asObservable()])
+    .catchError({ _ in third.asObservable()})
+    .subscribe{ print($0) }
+
+first.onError(QuizError())
+second.onNext(2)
+third.onNext(3)
+
+second.onError(QuizError())
+third.onNext(4)
+```
+
+- A: `next(2) error`
+- B: `next(2) next(3) next(4)`
+- C: `next(3) next(4)`
+- D: `next(3) error`
+
 
