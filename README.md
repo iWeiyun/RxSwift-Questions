@@ -361,7 +361,7 @@ let two = PublishSubject<String>()
 
 let source = PublishSubject<Observable<String>>()
 source.switchLatest().subscribe(onNext: { value in
-print(value)
+    print(value)
 })
 
 one.onNext("1")
@@ -387,18 +387,15 @@ one.onNext("3")
 #### 31. 如下代码执行结果是什么样的？
 ```swift
 let ob = Observable<Int>.from([1, 2]).publish()
-ob.subscribe(onNext: { int in
-print("X")
+ob.subscribe(onNext: { _ in
+    print("X")
 })
-
-ob.subscribe(onNext: { int in
-print("Y")
+ob.subscribe(onNext: { _ in
+    print("Y")
 })
-
 ob.connect()
-
-ob.subscribe(onNext: { int in
-print("Z")
+ob.subscribe(onNext: { _ in
+    print("Z")
 })
 ```
 
@@ -412,15 +409,11 @@ print("Z")
 #### 32. 如下代码执行结果是什么样的？
 ```swift
 let pbSubject = PublishSubject<Int>()
-pbSubject.debounce(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
-.subscribe(onNext: { int in
-print("d", int)
-})
+_ = pbSubject.debounce(.seconds(1), scheduler: MainScheduler.instance)
+    .subscribe(onNext: { print("d", $0) })
 
-pbSubject.throttle(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
-.subscribe(onNext: { int in
-print("t", int)
-})
+_ = pbSubject.throttle(.seconds(1), scheduler: MainScheduler.instance)
+    .subscribe(onNext: { print("t", $0) })
 
 pbSubject.onNext(1)
 pbSubject.onNext(2)
@@ -434,42 +427,19 @@ pbSubject.onNext(3)
 
 ----
 
-#### 33. 如下代码执行结果是什么样的？
-```swift
-let subject = ReplaySubject<String>.create(bufferSize: 2)
-subject.onNext("0")
-subject.onNext("1")
-subject.onNext("2")
-
-subject.subscribe { print("X", $0.element ?? $0.error) }
-subject.subscribe { print("Y", $0.element ?? $0.error) }
-
-subject.onNext("3")
-subject.onError(-Error)
-
-subject.subscribe { print("Z", $0.element ?? $0.error) }
-```
-
-- A: `X0 X1 Y0 Y1 X2 Y2 X-Error Y-Error Z-Error`
-- B: `X1 X2 Y1 Y2 X3 Y3 X-Error Y-Error Z-Error`
-- C: `X0 X1 Y0 Y1 X2 Y2 X-Error Y-Error Z0 Z1 Z-Error`
-- D: `X1 X2 Y1 Y2 X3 Y3 X-Error Y-Error Z2 Z3 Z-Error`
-
-----
-
 #### 34. 如下代码执行结果是什么样的？
 ```swift
 let button = PublishSubject<Void>()
 let textField = PublishSubject<String>()
 button.withLatestFrom(textField).subscribe(onNext: { value in
-print(value)
+    print(value)
 })
 
 textField.onNext("A")
 textField.onNext("B")
 textField.onNext("C")
-button.onNext({}())
-button.onNext({}())
+button.onNext(())
+button.onNext(())
 ```
 
 - A: `A B C C C`
@@ -488,9 +458,8 @@ _ = Observable.of(1, 2, 3, 4).flatMap { v -> Observable<Int> in
         return Observable.error(TestError.test)
     }
     return Observable.of(v)
-}.retry().subscribe(onNext: { r in
-    print(r)
-})
+}.retry()
+.subscribe(onNext: { print($0) })
 ```
 
 - A: `1 2 3 4`
