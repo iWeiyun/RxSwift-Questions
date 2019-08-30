@@ -637,4 +637,51 @@ third.onNext(4)
 - C: `next(3) next(4)`
 - D: `next(3) error`
 
+----
+
+#### 41. 如下代码执行结果是？
+```swift
+let first = PublishSubject<Int>()
+let second = PublishSubject<Int>()
+_ = first
+    .asObservable()
+    .timeout(.milliseconds(200), scheduler: MainScheduler.instance)
+    .delay(.milliseconds(400), scheduler: MainScheduler.instance)
+    .catchError({ _ in return Observable.empty()})
+    .ifEmpty(switchTo: second)
+    .subscribe({ print($0) })
+
+first.onNext(1)
+second.onNext(2)
+```
+
+- A: `next(1)`
+- B: `next(2)`
+- C: `next(1) next(2)`
+- D: `(NOTHING OUTPUT)`
+
+----
+
+#### 42. 如下代码执行结果是？
+```swift
+let first = PublishSubject<Int>()
+let second = PublishSubject<Int>()
+_ = first
+    .asObservable()
+    .timeout(.milliseconds(200), scheduler: MainScheduler.instance)
+    .delay(.milliseconds(400), scheduler: MainScheduler.instance)
+    .catchError({ _ in return Observable.empty()})
+    .ifEmpty(switchTo: second)
+    .subscribe({ print($0) })
+
+first.onNext(1)
+second.onNext(2)
+first.onCompleted()
+```
+
+- A: `next(1)`
+- B: `next(2)`
+- C: `next(1) next(2)`
+- D: `(NOTHING OUTPUT)`
+
 
