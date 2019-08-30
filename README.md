@@ -467,4 +467,37 @@ _ = Observable.of(1, 2, 3, 4).flatMap { v -> Observable<Int> in
 - C: `1 1 2 3 4`
 - D: `1 2 3 4 1 2 3 4`
 
+----
+
+#### 35. 如下代码执行结果是？
+```swift
+let first: Single<Int> = Single.create { observer -> Disposable in
+    observer(.success(1))
+    observer(.success(2))
+    return Disposables.create()
+}
+
+let second: Observable<Int> = Observable.create { observer -> Disposable in
+    observer.onNext(3)
+    observer.onNext(4)
+    return Disposables.create()
+}
+
+_ = first.subscribe({ print($0) })
+_ = first
+    .asObservable()
+    .single()
+    .subscribe({ print($0) })
+
+_ = second.subscribe({ print($0) })
+_ = second
+    .single()
+    .subscribe({ print($0) })
+```
+
+- A: `error, next(1), error, next(3), next(4), next(3), error`
+- B: `error, next(1), completed, next(3), next(4), next(3), error`
+- C: `success(1), next(1), completed, next(3), next(4), next(3), completed`
+- D: `success(1), next(1), completed, next(3), next(4), next(3), error`
+
 
