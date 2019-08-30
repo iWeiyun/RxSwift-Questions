@@ -500,4 +500,38 @@ _ = second
 - C: `success(1), next(1), completed, next(3), next(4), next(3), completed`
 - D: `success(1), next(1), completed, next(3), next(4), next(3), error`
 
+----
+
+#### 36. 如下代码执行结果是？
+```swift
+let subject = BehaviorSubject(value: 1)
+let observable = subject.asObserver().debug("O").publish().refCount()
+
+subject.onNext(2)
+
+var subscriptions = [
+    observable.debug("A").subscribe(onNext: { print("A\($0)") }),
+    observable.debug("B").subscribe(onNext: { print("B\($0)") }),
+]
+
+subject.onNext(3)
+
+subscriptions.popLast()?.dispose()
+
+subject.onNext(4)
+
+subscriptions.popLast()?.dispose()
+
+subject.onNext(5)
+
+subscriptions.append(observable.subscribe(onNext: { print("C\($0)") }))
+
+subject.onNext(6)
+```
+
+- A: `A2 B2 A3 B3 A4 C5 C6`
+- B: `A2 B2 A3 B3 A4 C6`
+- C: `A2 A3 B3 A4 C5 C6`
+- D: `B3 A3 B3 A4 C5 C6`
+
 
