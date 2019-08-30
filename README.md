@@ -534,4 +534,31 @@ subject.onNext(6)
 - C: `A2 A3 B3 A4 C5 C6`
 - D: `B3 A3 B3 A4 C5 C6`
 
+----
+
+#### 37. 如下代码执行结果是？
+```swift
+let first = PublishSubject<Int>()
+let second = PublishSubject<Int>()
+
+first.catchError({ _ in return second.catchErrorJustReturn(0) })
+    .subscribe({ print($0) })
+    .disposed(by: disposeBag)
+
+first.onNext(1)
+second.onNext(2)
+first.onError(QuizError())
+second.onNext(3)
+first.onNext(4)
+first.onError(QuizError())
+second.onNext(5)
+second.onError(QuizError())
+second.onNext(6)
+```
+
+- A: `next(1) error next(3) next(5) next(0) next(6)`
+- B: `next(1) error next(3) next(5) next(0) completed`
+- C: `next(1) next(3) next(5) next(0) next(6)`
+- D: `next(1) next(3) next(5) next(0) completed`
+
 
